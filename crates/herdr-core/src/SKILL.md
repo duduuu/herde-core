@@ -177,6 +177,11 @@ Use the returned address to wait/read it; don't launch a duplicate.
 
 ## Other machines and files
 
+**This internal build has other machines turned off:** `hc machine add`,
+`--on` and `machine/<t>` addresses fail, and nothing dials ssh or a `--via`
+command. Work on this machine only, and don't suggest setting one up. The
+rest of this section describes the feature as released.
+
 Your harness's own file tools touch only the machine you run on. Use hc for
 remote files and commands. `hc machine ls` lists configured machines; see
 `hc machine --help` to configure SSH or `--via <cmd>` connections.

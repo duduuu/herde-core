@@ -39,6 +39,9 @@ impl Machine {
     }
 }
 
+/// INTERNAL BUILD: false. Tests that dial another machine fail in this build.
+pub const REMOTE_ENABLED: bool = false;
+
 /// How hc gets there: `ssh <target> <line>`, or `<target> <line>` (`via`).
 #[derive(Clone, Copy)]
 pub struct Reach<'a> {
@@ -62,6 +65,9 @@ impl Reach<'_> {
         extra: &[&str],
         line: &str,
     ) -> Result<std::process::Command, RpcError> {
+        if !REMOTE_ENABLED {
+            return Err(disabled());
+        }
         if self.via {
             return crate::platform::via_command(self.target, line).map_err(|e| unreachable(*self, &e.to_string()));
         }
@@ -78,6 +84,12 @@ impl Reach<'_> {
         cmd.arg(self.target).arg(line);
         Ok(cmd)
     }
+}
+
+/// INTERNAL BUILD: other machines are off. Nothing here runs ssh, scp or a
+/// `via` command, so this core never dials out to another machine.
+pub fn disabled() -> RpcError {
+    RpcError::new("unreachable", "remote machines are disabled in this build", "")
 }
 
 /// No machine by that name: the error lists the ones there are.
@@ -141,6 +153,9 @@ pub fn default_name(target: &str, taken: impl Fn(&str) -> bool) -> Option<String
 /// An ssh target goes to ssh as one argument: never an option, never two
 /// words. A command (`via`) is one local command line.
 pub fn check_target(to: Reach) -> Result<(), RpcError> {
+    if !REMOTE_ENABLED {
+        return Err(disabled());
+    }
     let target = to.target;
     if to.via {
         if target.trim().is_empty() || target.chars().any(char::is_control) {
@@ -210,7 +225,7 @@ pub fn login(paths: &crate::paths::Paths, to: Reach) -> Result<(), RpcError> {
 /// Ends the shared login to `target`, if one is up (a forgotten machine).
 pub fn logout(paths: &crate::paths::Paths, to: Reach) {
     let target = to.target;
-    if cfg!(unix) && std::env::var_os("HC_SSH").is_none() && !to.via {
+    if REMOTE_ENABLED && cfg!(unix) && std::env::var_os("HC_SSH").is_none() && !to.via {
         let mut cmd = ssh(paths, target, &[]);
         cmd.args(["-O", "exit", target])
             .stdin(std::process::Stdio::null())
@@ -572,6 +587,9 @@ fn install_payload(bin: &Path, scratch: &Path) -> Result<(Vec<u8>, bool), RpcErr
 /// home folder, and the installer runs from them (no download there). It
 /// swaps an hc already there the planned way, so its terminals keep running.
 fn install_windows(paths: &crate::paths::Paths, target: &str, session: Option<&str>) -> Result<String, RpcError> {
+    if !REMOTE_ENABLED {
+        return Err(disabled());
+    }
     let scratch = crate::releases::Scratch::new()?;
     let version = env!("CARGO_PKG_VERSION");
     let m = crate::releases::manifest(Some(version), &scratch.0).map_err(|_| {

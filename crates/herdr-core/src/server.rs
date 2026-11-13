@@ -230,6 +230,12 @@ async fn connection(core: Arc<Core>, read: platform::AsyncRead, mut write: Write
     let mut writer = tokio::spawn(write_frames(core.clone(), conn.clone(), write));
     // Another core dialing in says who it is in its hello.
     let hello: Value = serde_json::from_str(&line).unwrap_or_default();
+    // INTERNAL BUILD: other machines are off, so a core dialing in is refused.
+    if !crate::machines::REMOTE_ENABLED && hello["params"]["core"].is_object() {
+        eprintln!("core: refused a core dialing in: remote machines are disabled in this build");
+        writer.abort();
+        return Ok(());
+    }
     crate::remote::peer_joined(&core, &conn, &hello["params"]);
     // It ends when it closes, can't be written to, or stopped reading so long
     // that its replies passed `MAX_CONTROL`.

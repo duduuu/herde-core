@@ -33,18 +33,14 @@ fn unavailable(why: String) -> RpcError {
     RpcError::new("unavailable", why, "check your connection; the releases are at releases.herdr.dev")
 }
 
-fn curl(url: &str, to: &Path) -> Result<(), RpcError> {
-    // Quiet: our error says what failed, and piped stderr is one JSON error.
-    let ok = Command::new("curl")
-        .args(["-fsL", "--retry", "2", "--connect-timeout", "10", "-o"])
-        .arg(to)
-        .arg(url)
-        .stderr(std::process::Stdio::null())
-        .status();
-    match ok {
-        Ok(s) if s.success() => Ok(()),
-        _ => Err(unavailable(format!("cannot download {url}"))),
-    }
+/// INTERNAL BUILD: hc never downloads anything. Updates are distributed
+/// internally; `hc update` and installing hc on another machine fail here.
+fn curl(url: &str, _to: &Path) -> Result<(), RpcError> {
+    Err(RpcError::new(
+        "unavailable",
+        format!("downloads are disabled in this build (asked for {url})"),
+        "hc is distributed internally: install the new build from your internal channel",
+    ))
 }
 
 /// The latest release's list, or one version's.

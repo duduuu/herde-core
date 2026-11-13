@@ -234,6 +234,13 @@ pub fn start_all(core: &Arc<Core>) {
 /// off to 30 s) until the machine is removed.
 pub fn keep_up(core: &Arc<Core>, id: String) {
     let mut st = core.lock();
+    // INTERNAL BUILD: never dials; a machine kept from before just shows as
+    // unreachable instead of retrying on a timer.
+    if !crate::machines::REMOTE_ENABLED {
+        let why = "remote machines are disabled in this build".to_owned();
+        st.lines.insert(id, LineState::Unreachable { since_ms: now_ms(), why });
+        return;
+    }
     st.lines.insert(id.clone(), LineState::Connecting);
     let task = tokio::spawn(supervise(core.clone(), id.clone()));
     if let Some(old) = st.line_tasks.insert(id, task.abort_handle()) {

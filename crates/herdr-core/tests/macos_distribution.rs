@@ -120,6 +120,7 @@ fn release_archive_binaries_verify_independently() {
 }
 
 #[test]
+#[ignore = "internal build: the public release workflow was removed"]
 fn production_signing_covers_both_release_targets() {
     let workflow = std::fs::read_to_string(format!("{ROOT}/.github/workflows/release.yml")).unwrap();
     for target in ["Herdr Core.app", "herdr-core"] {
