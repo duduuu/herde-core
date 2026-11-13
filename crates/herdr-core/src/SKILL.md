@@ -256,8 +256,8 @@ paths start at your current folder. Prefer explicit paths for remote work.
   is already current. JSON reports `restarted: true`; terminals keep running.
   Managed installs must be updated with their package manager instead, and
   one in a folder you can't write (Unix) the way it was installed.
-- On macOS, privacy requests from terminal programs belong to Herdr Core,
-  not Herdr.app. Existing Herdr.app grants do not transfer to the core.
+- On macOS, privacy requests from terminal programs belong to Herde Core,
+  not Herde.app. Existing Herde.app grants do not transfer to the core.
 - macOS installs keep the newest bundle at the fixed physical path
   `~/.local/share/herdr-core/active/Herdr Core.app`, selected by a `current`
   symlink, with `hc` and `herdr-core` links in

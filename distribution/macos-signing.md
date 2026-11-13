@@ -14,8 +14,8 @@ Tag pushes require all five secrets. Both macOS architectures are signed with
 hardened runtime and notarized before packaging; rejection fails the release.
 Manual/untagged release builds use ad-hoc signing without production credentials.
 
-The signature uses the stable identifier `dev.herdr.core`. The executable has
-a bound Info.plist naming **Herdr Core** and explaining privacy requests made
+The signature uses the stable identifier `dev.herde.core`. The executable has
+a bound Info.plist naming **Herde Core** and explaining privacy requests made
 by terminal programs. Existing Herdr.app grants do not transfer. Grants to
 ad-hoc builds may need to be granted again on the first Developer ID release.
 Keep the signing team and identifier stable across updates. This does not

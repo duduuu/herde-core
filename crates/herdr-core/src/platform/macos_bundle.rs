@@ -6,7 +6,7 @@ use std::process::Command;
 
 pub const EXECUTABLE: &str = "Contents/MacOS/herdr-core";
 const REQUIREMENT: &str =
-    "=identifier \"dev.herdr.core\" and anchor apple generic and certificate leaf[subject.OU] = \"2W9652Q7QR\"";
+    "=identifier \"dev.herde.core\" and anchor apple generic and certificate leaf[subject.OU] = \"2W9652Q7QR\"";
 const LSREGISTER: &str =
     "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister";
 
@@ -38,10 +38,10 @@ pub fn verify(path: &Path, local: bool) -> io::Result<()> {
     if local {
         let out = Command::new("/usr/bin/codesign").arg("-dv").arg(path).output()?;
         if String::from_utf8_lossy(&out.stderr).lines().any(|line| line == "Signature=adhoc") {
-            return verify("=identifier \"dev.herdr.core\"");
+            return verify("=identifier \"dev.herde.core\"");
         }
     }
-    Err(io::Error::other("expected Herdr's Developer ID signature (dev.herdr.core, team 2W9652Q7QR)"))
+    Err(io::Error::other("expected the Herde Developer ID signature (dev.herde.core, team 2W9652Q7QR)"))
 }
 
 struct Link {

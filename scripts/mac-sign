@@ -4,7 +4,7 @@ set -euo pipefail
 
 bin=${1:?usage: mac-sign herdr-core}
 root=$(cd "$(dirname "$0")/.." && pwd)
-options=(--options runtime --entitlements "$root/distribution/macos-entitlements.plist" --identifier dev.herdr.core)
+options=(--options runtime --entitlements "$root/distribution/macos-entitlements.plist" --identifier dev.herde.core)
 sign_target() {
   if [[ -d $bin/Contents/MacOS ]]; then
     codesign --force "${options[@]}" "$@" "$bin/Contents/MacOS/herdr-core"

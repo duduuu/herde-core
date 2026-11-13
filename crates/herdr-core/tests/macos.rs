@@ -53,7 +53,7 @@ fn executable_has_bound_core_identity_and_usage_descriptions() {
     let output = Command::new("/usr/bin/otool").args(["-P", BIN]).output().unwrap();
     assert!(output.status.success(), "{output:?}");
     let plist = String::from_utf8(output.stdout).unwrap();
-    for value in ["dev.herdr.core", "Herdr Core", "NSLocalNetworkUsageDescription", "NSAppleEventsUsageDescription"] {
+    for value in ["dev.herde.core", "Herde Core", "NSLocalNetworkUsageDescription", "NSAppleEventsUsageDescription"] {
         assert!(plist.contains(value), "{plist}");
     }
     assert!(!plist.contains("@VERSION@"), "{plist}");
@@ -78,7 +78,7 @@ fn launchd_core_and_program_survive_the_launcher_and_leave_no_job() {
     assert_eq!(meta.uid(), unsafe { libc::getuid() }, "first log belongs to the caller");
     let jobs = Command::new("/bin/launchctl").arg("list").output().unwrap();
     assert!(
-        !String::from_utf8_lossy(&jobs.stdout).contains(&format!("dev.herdr.core.{launcher}.")),
+        !String::from_utf8_lossy(&jobs.stdout).contains(&format!("dev.herde.core.{launcher}.")),
         "one-shot job removed"
     );
 

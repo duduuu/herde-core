@@ -14,7 +14,7 @@ const DETACH: &str = "HC_LAUNCHD_DETACH";
 const SENTINEL: &str = "--hc-launchd";
 const DIRECT: &str = "HC_LAUNCHD_DIRECT";
 const LAUNCHCTL: &str = "/bin/launchctl";
-const PREFIX: &str = "dev.herdr.core.";
+const PREFIX: &str = "dev.herde.core.";
 const HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(10);
 
 #[derive(serde::Serialize, serde::Deserialize)]

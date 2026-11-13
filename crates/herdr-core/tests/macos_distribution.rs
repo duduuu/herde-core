@@ -70,7 +70,7 @@ fn mac_sign_uses_runtime_and_entitlements_even_for_ad_hoc_builds() {
     let calls = std::fs::read_to_string(s.root.join("calls")).unwrap();
     assert!(calls.contains("--options runtime"), "{calls}");
     assert!(calls.contains("--entitlements ") && calls.contains("macos-entitlements.plist"), "{calls}");
-    assert!(calls.contains("--identifier dev.herdr.core"), "{calls}");
+    assert!(calls.contains("--identifier dev.herde.core"), "{calls}");
     assert!(calls.contains("--verify --strict"), "{calls}");
     let lines: Vec<_> = calls.lines().collect();
     assert!(lines[0].ends_with("/Contents/MacOS/herdr-core"), "nested executable first: {calls}");
@@ -152,7 +152,7 @@ fn production_signing_covers_both_release_targets() {
         assert_eq!(signs.len(), if bundle { 2 } else { 1 }, "{calls}");
         for sign in signs {
             for option in
-                ["--timestamp", "--options runtime", "--entitlements", "--identifier dev.herdr.core", "--sign ABCDEF"]
+                ["--timestamp", "--options runtime", "--entitlements", "--identifier dev.herde.core", "--sign ABCDEF"]
             {
                 assert!(sign.contains(option), "{sign}");
             }

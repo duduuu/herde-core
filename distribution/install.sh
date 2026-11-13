@@ -90,7 +90,7 @@ if [ "$bundle" = 1 ] && [ -x "$tmp/Herdr Core.app/Contents/MacOS/herdr-core" ]; 
   fi
   case "$releases" in
     https://releases.herdr.dev | https://releases.herdr.dev/)
-      /usr/bin/codesign --verify --strict -R '=identifier "dev.herdr.core" and anchor apple generic and certificate leaf[subject.OU] = "2W9652Q7QR"' "$tmp/Herdr Core.app" || fail "not a signed Herdr release" ;;
+      /usr/bin/codesign --verify --strict -R '=identifier "dev.herde.core" and anchor apple generic and certificate leaf[subject.OU] = "2W9652Q7QR"' "$tmp/Herdr Core.app" || fail "not a signed Herdr release" ;;
   esac
   "$bundled" --hc-install-bundle "$bundled" "$bin/herdr-core" || fail "installing Herdr Core.app failed"
   # A fresh install must not start a core (especially not a system/root core).
